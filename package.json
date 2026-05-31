@@ -1,0 +1,31 @@
+{
+  "name": "wa-group-poster-panel",
+  "version": "2.0.0",
+  "description": "Panel web bot multi-akun untuk posting terjadwal ke grup WhatsApp (foto/video + teks custom)",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "whatsapp",
+    "bot",
+    "panel",
+    "group",
+    "poster",
+    "scheduler",
+    "multi-account"
+  ],
+  "author": "stefan izmi",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "multer": "^2.0.1",
+    "qrcode": "^1.5.4",
+    "whatsapp-web.js": "^1.26.0"
+  }
+}

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel Bot WhatsApp — Posting Grup Terjadwal</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1a6.5 6.5 0 0 1-3.2-2.8c-.1-.2 0-.4.1-.5l.4-.5.2-.4v-.4l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5a1 1 0 0 0-.7.3c-.3.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.2.7 3 .6.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1l-.4-.2z"/></svg>
+      </span>
+      <div>
+        <h1>Panel Bot WhatsApp</h1>
+        <p class="subtitle">Posting grup terjadwal &middot; multi-akun</p>
+      </div>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-tab="accounts">Akun</button>
+      <button class="tab" data-tab="create">Buat Jadwal</button>
+      <button class="tab" data-tab="jobs">Daftar Jadwal</button>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- ===================== TAB: AKUN ===================== -->
+    <section id="tab-accounts" class="tab-panel active">
+      <div class="section-head">
+        <h2>Akun WhatsApp</h2>
+        <div class="row-actions">
+          <input type="text" id="newAccountLabel" placeholder="Nama akun (mis. Akun Promo)" />
+          <button id="btnAddAccount" class="btn btn-primary">+ Tambah Akun</button>
+        </div>
+      </div>
+      <p class="muted">Tambahkan satu atau beberapa akun, lalu scan QR masing-masing dari WhatsApp di HP Anda (Perangkat Tertaut).</p>
+      <div id="accountGrid" class="account-grid">
+        <p class="muted empty">Belum ada akun. Klik "Tambah Akun" untuk memulai.</p>
+      </div>
+    </section>
+
+    <!-- ===================== TAB: BUAT JADWAL ===================== -->
+    <section id="tab-create" class="tab-panel">
+      <div class="section-head">
+        <h2 id="formTitle">Buat Jadwal Posting</h2>
+      </div>
+
+      <form id="jobForm" class="card">
+        <input type="hidden" id="jobId" />
+
+        <div class="field">
+          <label for="fAccount">Akun Pengirim</label>
+          <select id="fAccount" required></select>
+          <small class="muted">Hanya akun berstatus "Terhubung" yang bisa mengirim.</small>
+        </div>
+
+        <div class="field">
+          <label for="fName">Nama Jadwal</label>
+          <input type="text" id="fName" placeholder="Mis. Promo Pagi" />
+        </div>
+
+        <div class="field">
+          <label for="fCaption">Teks / Caption</label>
+          <textarea id="fCaption" rows="4" placeholder="Tulis pesan custom di sini... (boleh emoji)"></textarea>
+        </div>
+
+        <div class="field">
+          <label for="fMedia">Foto / Video (opsional)</label>
+          <input type="file" id="fMedia" accept="image/*,video/*" />
+          <div id="mediaPreview" class="preview hidden"></div>
+          <label id="currentMediaRow" class="inline-check hidden">
+            <input type="checkbox" id="fRemoveMedia" /> Hapus media saat ini
+          </label>
+        </div>
+
+        <div class="field">
+          <div class="group-head">
+            <label>Grup Tujuan</label>
+            <div class="group-tools">
+              <input type="search" id="groupSearch" placeholder="Cari grup..." />
+              <button type="button" id="btnReloadGroups" class="btn btn-mini">Muat Grup</button>
+              <button type="button" id="btnSelectAll" class="btn btn-mini">Semua</button>
+              <button type="button" id="btnClearAll" class="btn btn-mini">Kosongkan</button>
+            </div>
+          </div>
+          <div id="groupList" class="group-list">
+            <p class="muted">Pilih akun terhubung lalu klik "Muat Grup".</p>
+          </div>
+          <small id="groupCount" class="muted">0 grup dipilih</small>
+        </div>
+
+        <div class="grid-2">
+          <div class="field">
+            <label for="fInterval">Interval Kirim (menit)</label>
+            <input type="number" id="fInterval" min="1" max="360" value="30" />
+            <small class="muted" id="intervalHint">Antara 1 - 360 menit.</small>
+          </div>
+          <div class="field">
+            <label>Trigger Detik (acak)</label>
+            <div class="sec-range">
+              <input type="number" id="fMinSecond" min="13" max="55" value="13" />
+              <span>s/d</span>
+              <input type="number" id="fMaxSecond" min="13" max="55" value="55" />
+              <span class="suffix">detik</span>
+            </div>
+            <small class="muted" id="secondHint">Pengiriman jatuh di detik acak 13 - 55 (bukan detik 00).</small>
+          </div>
+        </div>
+
+        <label class="inline-check">
+          <input type="checkbox" id="fEnabled" checked /> Aktifkan jadwal setelah disimpan
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" id="btnSaveJob" class="btn btn-primary btn-block">Simpan Jadwal</button>
+          <button type="button" id="btnCancelEdit" class="btn btn-secondary hidden">Batal Edit</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ===================== TAB: DAFTAR JADWAL ===================== -->
+    <section id="tab-jobs" class="tab-panel">
+      <div class="section-head">
+        <h2>Daftar Jadwal</h2>
+        <button id="btnReloadJobs" class="btn btn-mini">Refresh</button>
+      </div>
+      <div id="jobList" class="job-list">
+        <p class="muted empty">Belum ada jadwal.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

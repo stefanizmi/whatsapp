@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# WhatsApp session data (LocalAuth)
+.wwebjs_auth/
+.wwebjs_cache/
+
+# Persisted data (akun & jadwal)
+data/
+
+# Uploaded media
+uploads/*
+!uploads/.gitkeep
+
+# PM2 / runtime logs
+logs/
+*.log
+npm-debug.log*
+
+# Environment
+.env
+
+# OS
+.DS_Store
+Thumbs.db
